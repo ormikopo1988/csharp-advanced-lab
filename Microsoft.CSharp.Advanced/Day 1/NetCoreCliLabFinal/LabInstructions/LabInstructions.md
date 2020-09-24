@@ -2,7 +2,7 @@
 # Open a command or powershell prompt and make sure you have the .NET Core SDK installed. 
 # This can be easily checked by opening a terminal window and typing the below command.
 # You should see the version of the SDK installed. 
-# If not, you’ll want to download the .NET Core SDK at https://www.microsoft.com/net. 
+# If not, you’ll want to download the .NET Core SDK at https://dotnet.microsoft.com/download. 
 
 dotnet --version
 
