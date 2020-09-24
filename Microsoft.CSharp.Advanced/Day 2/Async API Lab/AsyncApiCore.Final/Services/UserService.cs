@@ -1,5 +1,6 @@
 ﻿using AsyncApiCore.Final.Interfaces;
 using AsyncApiCore.Final.Models;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -10,38 +11,55 @@ namespace AsyncApiCore.Final.Services
 {
     public class UserService : IUserService
     {
+        private readonly HttpClient _httpClient;
+        private readonly ILogger<UserService> _logger;
+
+        public UserService(HttpClient httpClient, ILogger<UserService> logger)
+        {
+            _httpClient = httpClient;
+            _logger = logger;
+        }
+
         public async Task<List<User>> GetAllAsync()
         {
             try
             {
-                using (HttpClient client = new HttpClient())
-                {
-                    var users = await client.GetStringAsync("https://jsonplaceholder.typicode.com/users");
+                var httpResponseMessage = await _httpClient.GetAsync(string.Empty);
 
-                    return JsonConvert.DeserializeObject<List<User>>(users);
+                if (httpResponseMessage.IsSuccessStatusCode)
+                {
+                    var contentStr = await httpResponseMessage.Content.ReadAsStringAsync();
+
+                    return JsonConvert.DeserializeObject<List<User>>(contentStr);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return null;
+                _logger.LogError("UserService GetAllAsync exception.", ex);
             }
+
+            return null;
         }
 
         public async Task<User> GetByIdAsync(int id)
         {
             try
             {
-                using (HttpClient client = new HttpClient())
-                {
-                    var user = await client.GetStringAsync("https://jsonplaceholder.typicode.com/users/" + id.ToString());
+                var httpResponseMessage = await _httpClient.GetAsync(id.ToString());
 
-                    return JsonConvert.DeserializeObject<User>(user);
+                if (httpResponseMessage.IsSuccessStatusCode)
+                {
+                    var contentStr = await httpResponseMessage.Content.ReadAsStringAsync();
+
+                    return JsonConvert.DeserializeObject<User>(contentStr);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return null;
+                _logger.LogError("UserService GetByIdAsync exception.", ex);
             }
+
+            return null;
         }
     }
 }

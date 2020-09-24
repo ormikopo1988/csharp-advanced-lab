@@ -6,6 +6,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Polly;
+using Polly.Extensions.Http;
+using System;
+using System.Net.Http;
 
 namespace AsyncApiCore.Final
 {
@@ -23,8 +27,23 @@ namespace AsyncApiCore.Final
         {
             services.AddControllers();
 
-            services.AddTransient<IPostService, PostService>();
-            services.AddTransient<IUserService, UserService>();
+            // UserService Named HttpClient Registration
+            services.AddHttpClient<IUserService, UserService>(client =>
+            {
+                client.BaseAddress = new Uri("https://jsonplaceholder.typicode.com/users/");
+            })
+                .AddPolicyHandler(GetRetryPolicy())
+                .AddPolicyHandler(GetCircuitBreakerPolicy());
+
+            // PostService Named HttpClient Registration
+            services.AddHttpClient<IPostService, PostService>(client =>
+            {
+                client.BaseAddress = new Uri("https://jsonplaceholder.typicode.com/posts/");
+            })
+                .AddPolicyHandler(GetRetryPolicy())
+                .AddPolicyHandler(GetCircuitBreakerPolicy());
+
+            // MovieRepository Registration
             services.AddScoped<IMovieRepository, MovieRepository>();
         }
 
@@ -46,6 +65,22 @@ namespace AsyncApiCore.Final
             {
                 endpoints.MapControllers();
             });
+        }
+
+        private static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
+        {
+            return HttpPolicyExtensions
+                .HandleTransientHttpError()
+                .OrResult(msg => msg.StatusCode == System.Net.HttpStatusCode.NotFound)
+                .WaitAndRetryAsync(6, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
+        }
+
+        private static IAsyncPolicy<HttpResponseMessage> GetCircuitBreakerPolicy()
+        {
+            return HttpPolicyExtensions
+                .HandleTransientHttpError()
+                .OrResult(msg => msg.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+                .CircuitBreakerAsync(3, TimeSpan.FromMinutes(2));
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AsyncApiCore.Final.Interfaces;
 using AsyncApiCore.Final.Models;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -10,55 +11,76 @@ namespace AsyncApiCore.Final.Services
 {
     public class PostService : IPostService
     {
+        private readonly HttpClient _httpClient;
+        private readonly ILogger<PostService> _logger;
+
+        public PostService(HttpClient httpClient, ILogger<PostService> logger)
+        {
+            _httpClient = httpClient;
+            _logger = logger;
+        }
+
         public async Task<List<Post>> GetAllAsync()
         {
             try
             {
-                using (HttpClient client = new HttpClient())
-                {
-                    var posts = await client.GetStringAsync("https://jsonplaceholder.typicode.com/posts");
+                var httpResponseMessage = await _httpClient.GetAsync(string.Empty);
 
-                    return JsonConvert.DeserializeObject<List<Post>>(posts);
+                if (httpResponseMessage.IsSuccessStatusCode)
+                {
+                    var contentStr = await httpResponseMessage.Content.ReadAsStringAsync();
+
+                    return JsonConvert.DeserializeObject<List<Post>>(contentStr);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return null;
+                _logger.LogError("PostService GetAllAsync exception.", ex);
             }
+
+            return null;
         }
 
         public async Task<Post> GetByIdAsync(int id)
         {
             try
             {
-                using (HttpClient client = new HttpClient())
-                {
-                    var post = await client.GetStringAsync("https://jsonplaceholder.typicode.com/posts/" + id.ToString());
+                var httpResponseMessage = await _httpClient.GetAsync(id.ToString());
 
-                    return JsonConvert.DeserializeObject<Post>(post);
+                if (httpResponseMessage.IsSuccessStatusCode)
+                {
+                    var contentStr = await httpResponseMessage.Content.ReadAsStringAsync();
+
+                    return JsonConvert.DeserializeObject<Post>(contentStr);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return null;
+                _logger.LogError("PostService GetByIdAsync exception.", ex);
             }
+
+            return null;
         }
 
         public async Task<List<Post>> GetPostsForUserAsync(int userID)
         {
             try
             {
-                using (HttpClient client = new HttpClient())
-                {
-                    var posts = await client.GetStringAsync("https://jsonplaceholder.typicode.com/posts?userId=" + userID.ToString());
+                var httpResponseMessage = await _httpClient.GetAsync("?userId=" + userID.ToString());
 
-                    return JsonConvert.DeserializeObject<List<Post>>(posts);
+                if (httpResponseMessage.IsSuccessStatusCode)
+                {
+                    var contentStr = await httpResponseMessage.Content.ReadAsStringAsync();
+
+                    return JsonConvert.DeserializeObject<List<Post>>(contentStr);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return null;
+                _logger.LogError("PostService GetPostsForUserAsync exception.", ex);
             }
+
+            return null;
         }
     }
 }

@@ -11,6 +11,22 @@ using System.Linq;
 
 namespace AsyncApiCore.Starter.Repositories
 {
+    // For testing this when ready:
+    // - Open SQL Server Object Explorer View in your VS2019 instance
+    // - Add (localdb)\MSSQLLocalDB instance to the view
+    // - Create a new database inside this local db instance called MockDb
+    // - Right-click on MockDb and run the following query:
+    //CREATE TABLE[dbo].[Movie]
+    //(
+    //    [Id] INT IDENTITY(1, 1) NOT NULL PRIMARY KEY,
+
+    //    [Name] NCHAR(50) NOT NULL,
+
+    //    [Description] NVARCHAR(MAX) NOT NULL,
+
+    //    [AppropriateAbove] INT NOT NULL,
+    //    [ImdbRating] FLOAT(53) NULL
+    //);
     public class MovieRepository : IMovieRepository
     {
         private readonly ILogger<MovieRepository> _logger;
