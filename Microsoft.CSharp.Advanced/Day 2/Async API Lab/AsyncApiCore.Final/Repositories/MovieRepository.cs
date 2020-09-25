@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace AsyncApiCore.Final.Repositories
@@ -23,20 +24,20 @@ namespace AsyncApiCore.Final.Repositories
             _connectionString = configuration.GetValue<string>("ConnectionStrings:Default");
         }
 
-        private async Task<IDbConnection> GetConnectionAsync()
+        private async Task<IDbConnection> GetConnectionAsync(CancellationToken cancellationToken = default)
         {
             var connection = new SqlConnection(_connectionString);
 
-            await connection.OpenAsync();
+            await connection.OpenAsync(cancellationToken);
 
             return connection;
         }
 
-        public async Task<List<Movie>> GetAllAsync()
+        public async Task<List<Movie>> GetAllAsync(CancellationToken cancellationToken = default)
         {
             try
             {
-                using (var connection = await GetConnectionAsync())
+                using (var connection = await GetConnectionAsync(cancellationToken))
                 {
                     var movies = await connection.QueryAsync<Movie>("SELECT * FROM [dbo].[Movie] WITH (NOLOCK)");
 
@@ -51,11 +52,11 @@ namespace AsyncApiCore.Final.Repositories
             }
         }
 
-        public async Task<Movie> GetByIdAsync(int id)
+        public async Task<Movie> GetByIdAsync(int id, CancellationToken cancellationToken = default)
         {
             try
             {
-                using (var connection = await GetConnectionAsync())
+                using (var connection = await GetConnectionAsync(cancellationToken))
                 {
                     var movie = await connection.QueryFirstOrDefaultAsync<Movie>("SELECT * FROM [dbo].[Movie] WITH (NOLOCK) WHERE Id=@Id", new { Id = id });
 
@@ -75,13 +76,13 @@ namespace AsyncApiCore.Final.Repositories
             }
         }
 
-        public async Task<int> SaveAsync(Movie movie)
+        public async Task<int> SaveAsync(Movie movie, CancellationToken cancellationToken = default)
         {
             try
             {
                 string sql = "INSERT INTO [dbo].[Movie] (Name, Description, AppropriateAbove, ImdbRating) Values (@Name, @Description, @AppropriateAbove, @ImdbRating);";
 
-                using (var connection = await GetConnectionAsync())
+                using (var connection = await GetConnectionAsync(cancellationToken))
                 {
                     var affectedRows = await connection.ExecuteAsync(sql, new { movie.Name, movie.Description, movie.AppropriateAbove, movie.ImdbRating });
 

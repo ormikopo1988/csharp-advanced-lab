@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace AsyncApiCore.Final.Services
@@ -20,11 +21,11 @@ namespace AsyncApiCore.Final.Services
             _logger = logger;
         }
 
-        public async Task<List<User>> GetAllAsync()
+        public async Task<List<User>> GetAllAsync(CancellationToken cancellationToken = default)
         {
             try
             {
-                var httpResponseMessage = await _httpClient.GetAsync(string.Empty);
+                var httpResponseMessage = await _httpClient.GetAsync(string.Empty, cancellationToken);
 
                 if (httpResponseMessage.IsSuccessStatusCode)
                 {
@@ -41,11 +42,11 @@ namespace AsyncApiCore.Final.Services
             return null;
         }
 
-        public async Task<User> GetByIdAsync(int id)
+        public async Task<User> GetByIdAsync(int id, CancellationToken cancellationToken = default)
         {
             try
             {
-                var httpResponseMessage = await _httpClient.GetAsync(id.ToString());
+                var httpResponseMessage = await _httpClient.GetAsync(id.ToString(), cancellationToken);
 
                 if (httpResponseMessage.IsSuccessStatusCode)
                 {

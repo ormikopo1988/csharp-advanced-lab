@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace AsyncApiCore.Final.Controllers
@@ -22,11 +23,11 @@ namespace AsyncApiCore.Final.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
         {
             try
             {
-                var movies = await _movieRepository.GetAllAsync();
+                var movies = await _movieRepository.GetAllAsync(cancellationToken);
 
                 return new OkObjectResult(movies);
             }
@@ -39,7 +40,7 @@ namespace AsyncApiCore.Final.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetByID(int id)
+        public async Task<IActionResult> GetByID(int id, CancellationToken cancellationToken)
         {
             try
             {
@@ -48,7 +49,7 @@ namespace AsyncApiCore.Final.Controllers
                     return BadRequest();
                 }
 
-                var movie = await _movieRepository.GetByIdAsync(id);
+                var movie = await _movieRepository.GetByIdAsync(id, cancellationToken);
 
                 if (movie == null)
                 {
@@ -66,7 +67,7 @@ namespace AsyncApiCore.Final.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(Movie movie)
+        public async Task<IActionResult> Post(Movie movie, CancellationToken cancellationToken)
         {
             try
             {
@@ -75,7 +76,7 @@ namespace AsyncApiCore.Final.Controllers
                     return BadRequest();
                 }
 
-                var moviesInserted = await _movieRepository.SaveAsync(movie);
+                var moviesInserted = await _movieRepository.SaveAsync(movie, cancellationToken);
 
                 if (moviesInserted == 1)
                 {
