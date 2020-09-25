@@ -10,14 +10,6 @@ namespace VariantTypesGenerics.Starter
         static void Main(string[] args)
         {
             // 1st step
-            // To install EF Core, you install the package for the EF Core database provider(s) you want to target. 
-            // Here we will use SQLite because it runs on all platforms that .NET Core supports.
-            // Open a Powershell Window to the console app root directory and run the following
-            // - dotnet add package Microsoft.EntityFrameworkCore.Sqlite
-            // Alternatively, you can do the same through Visual Studio Nuget Package Manager
-            // To see the sqlite db and run queries download and install: https://marketplace.visualstudio.com/items?itemName=ErikEJ.SQLServerCompactSQLiteToolbox
-
-            // 2nd step
             // Define a DbContext class and entity classes that make up the model by creating a new class called EmployeeDb.cs and put it inside DbAccess folder.
             // The models we are going to use for this lab are defined inside the Models folder.
             // The EmployeeDb class must derive from DbContext.
@@ -37,7 +29,7 @@ namespace VariantTypesGenerics.Starter
             //    options.UseSqlite($"Data Source={absolutePath}");
             //}
 
-            // 3rd step
+            // 2nd step
             // Create a SqlLiteRepository.cs class and put it inside DbAccess folder.
             // Make this class implement IRepository<T> interface.
             // Implement the necessary methods as follows:
@@ -87,7 +79,7 @@ namespace VariantTypesGenerics.Starter
             //    }
             //}
 
-            // 4th step
+            // 3rd step
             // Create the database by following steps that use migrations to create it:
             // - dotnet tool install --global dotnet-ef
             // - dotnet add package Microsoft.EntityFrameworkCore.Design
@@ -97,7 +89,7 @@ namespace VariantTypesGenerics.Starter
             // The migrations command scaffolds a migration to create the initial set of tables for the model. 
             // The database update command creates the database and applies the new migration to it.
 
-            // 5th step
+            // 4th step
             // Uncomment the following code - Make the code compile by adding the necessary references.
             //using (IRepository<Employee> employeeRepository
             //    = new SqlLiteRepository<Employee>(new EmployeeDb()))
@@ -109,11 +101,6 @@ namespace VariantTypesGenerics.Starter
             //    ClearDb(employeeRepository);
             //}
 
-            // 6th step
-            // Run the app 
-            // - dotnet run
-            // Or from VS run the console app.
-
             // 1st exe
             // Change DumpPeople so as to take <Person> instead of <Employee>.
             // The way this method is in its current form it says that IRepository is invariant.
@@ -121,8 +108,11 @@ namespace VariantTypesGenerics.Starter
             // Consider which of Covariance or Contravariance should be applied to the IRepository generic interface 
             // in order to be able to reuse the DumpPeople logic between
             // both Employee and Person objects.
+            // Consider if the logic you are trying to reuse is read-only or write-only.
             // Consider adding a new interface and make its generic type T covariant / contravariant based on the requirements.
             // Consider which methods of IRepository you should move to the new interface.
+            // Make sure IRepository will still derive from this new introduced interface.
+            // Pass the new interface you introduced as expected argument in the method signature of DumpPeople and make it expect a generic type of <Person>.
 
             // 2nd exe
             // Change AddManagers so as to take <Manager> instead of <Employee>.
@@ -131,8 +121,11 @@ namespace VariantTypesGenerics.Starter
             // So If I have an IRepository<Employee>, I always have to treat it as an IRepository<Employee>.
             // Consider which of Covariance or Contravariance should be applied to the IRepository generic interface 
             // in order to be able to reuse the AddManagers logic between both Employee and Manager objects.
+            // Consider if the logic you are trying to reuse is read-only or write-only.
             // Consider adding a new interface and make its generic type T covariant / contravariant based on the requirements.
             // Consider which methods of IRepository you should move to the new interface.
+            // Make sure IRepository will still derive from this new introduced interface.
+            // Pass the new interface you introduced as expected argument in the method signature of AddManagers and make it expect a generic type of <Manager>.
         }
 
         static void AddEmployees(IRepository<Employee> employeeRepository)
@@ -161,6 +154,18 @@ namespace VariantTypesGenerics.Starter
             {
                 Console.WriteLine(employee.Name);
             }
+        }
+
+        static void ClearDb(IRepository<Employee> employeeRepository)
+        {
+            var allEmployees = employeeRepository.FindAll();
+
+            foreach (var emp in allEmployees)
+            {
+                employeeRepository.Delete(emp);
+            }
+
+            employeeRepository.Commit();
         }
     }
 }
