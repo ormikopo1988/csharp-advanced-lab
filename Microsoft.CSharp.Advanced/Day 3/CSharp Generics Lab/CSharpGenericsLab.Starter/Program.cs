@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 
 namespace CSharpGenericsLab.Starter
 {
@@ -22,19 +24,35 @@ namespace CSharpGenericsLab.Starter
 
             // Create a generic collection with five strings and default capacity and give it the name "requests".
             // Put inside the collection the strings "Request1", "Request2", "Request3", "Request4", "Request5".
-
+            ConcurrentQueue<string> requests = new ConcurrentQueue<string>();
+            requests.Enqueue("Request1");
+            requests.Enqueue("Request2");
+            requests.Enqueue("Request3");
+            requests.Enqueue("Request4");
+            requests.Enqueue("Request5");
 
             // Write code to enumerate through the elements of the collection.
 
-
+            foreach (string request in requests)
+            {
+                Console.WriteLine(request);
+            }
             // Write code to get the "Request2" from the collection
 
+            requests.TryDequeue(out string request1);
+            Console.WriteLine(request1);
+
+            requests.TryDequeue(out string request2);
+            Console.WriteLine(request2);
+
+            requests.TryPeek(out request2);
+            Console.WriteLine(request2);
 
             // Delete all the elements from the collection.
-
+            requests.Clear();
 
             // Print the number of the elements in the collection.
-
+            Console.WriteLine(requests.Count);
         }
 
         static void ScenarioTwo()
@@ -47,26 +65,39 @@ namespace CSharpGenericsLab.Starter
 
             // Create the sorted collection here.
             // Name the sorted collection "openWith".
-
+            SortedDictionary<string, string> openWith =
+               new SortedDictionary<string, string>();
 
             // Add some elements to the collection.
             // 1st item => Key: "txt", Value: "notepad.exe"
             // 2nd item => Key: "bmp", Value: "paint.exe"
             // 3rd item => Key: "dib", Value: "paint.exe"
             // 4th item => Key: "rtf", Value: "wordpad.exe"
-
+            openWith.Add("txt", "notepad.exe");
+            openWith.Add("bmp", "paint.exe");
+            openWith.Add("dib", "paint.exe");
+            openWith.Add("rtf", "wordpad.exe");
 
             // Try add an element with the same key, e.g. "txt".
             // Surround with try catch block. The catch block will expect an ArgumentException.
             // Inside the catch block write a message that the element with the specified key already exists.
+            try
+            {
+                openWith.Add("txt", "notepad++.exe");
+            }
+            catch (ArgumentException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
 
 
             // Access the "rtf" element of the collection by using the string indexer and write to console.
-
+            Console.WriteLine(openWith["rtf"]);
 
             // Use the indexer "rtf" to change the value associated with it.
             // Write the new value to the console.
-
+            openWith["rtf"] = "notepad++.exe";
+            Console.WriteLine(openWith["rtf"]);
 
             // Add a new element in the collection by setting the indexer for a key "doc" with a value "winword.exe".
 
