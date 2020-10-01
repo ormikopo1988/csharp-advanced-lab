@@ -134,10 +134,10 @@ namespace VariantTypesGenerics.Starter
             employeeRepository.Commit();
         }
 
-        static void AddManagers(IRepository<Employee> employeeRepository)
+        static void AddManagers(IWriteOnlyRepository<Manager> managerRepository)
         {
-            employeeRepository.Add(new Manager { Name = "Alex" });
-            employeeRepository.Commit();
+            managerRepository.Add(new Manager { Name = "Alex" });
+            managerRepository.Commit();
         }
 
         static void CountEmployees(IRepository<Employee> employeeRepository)
