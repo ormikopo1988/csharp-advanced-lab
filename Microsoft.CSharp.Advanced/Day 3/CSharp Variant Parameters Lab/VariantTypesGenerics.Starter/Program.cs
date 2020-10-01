@@ -91,15 +91,15 @@ namespace VariantTypesGenerics.Starter
 
             // 4th step
             // Uncomment the following code - Make the code compile by adding the necessary references.
-            //using (IRepository<Employee> employeeRepository
-            //    = new SqlLiteRepository<Employee>(new EmployeeDb()))
-            //{
-            //    AddEmployees(employeeRepository);
-            //    AddManagers(employeeRepository);
-            //    CountEmployees(employeeRepository);
-            //    DumpPeople(employeeRepository);
-            //    ClearDb(employeeRepository);
-            //}
+            using (IRepository<Employee> employeeRepository
+                = new SqlLiteRepository<Employee>(new EmployeeDb()))
+            {
+                AddEmployees(employeeRepository);
+                AddManagers(employeeRepository);
+                CountEmployees(employeeRepository);
+                DumpPeople(employeeRepository);
+                ClearDb(employeeRepository);
+            }
 
             // 1st exe
             // Change DumpPeople so as to take <Person> instead of <Employee>.
@@ -146,7 +146,7 @@ namespace VariantTypesGenerics.Starter
             Console.WriteLine(employeeRepository.FindAll().Count());
         }
 
-        static void DumpPeople(IRepository<Employee> employeeRepository)
+        static void DumpPeople(IReadRepo<Person> employeeRepository)
         {
             var employees = employeeRepository.FindAll();
 
