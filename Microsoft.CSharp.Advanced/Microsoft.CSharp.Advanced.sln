@@ -90,6 +90,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DI.Lab.Interfaces.Starter",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DI.Lab.Shared.Starter", "DI.Lab.Shared.Starter\DI.Lab.Shared.Starter.csproj", "{AD0592DE-741E-4718-824D-B9B7280148B5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DI.Lab.Services.Starter", "DI.Lab.Services.Starter\DI.Lab.Services.Starter.csproj", "{909E7907-540A-4ED8-B444-5A1F3BDE247F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -176,6 +178,10 @@ Global
 		{AD0592DE-741E-4718-824D-B9B7280148B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AD0592DE-741E-4718-824D-B9B7280148B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AD0592DE-741E-4718-824D-B9B7280148B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{909E7907-540A-4ED8-B444-5A1F3BDE247F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{909E7907-540A-4ED8-B444-5A1F3BDE247F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{909E7907-540A-4ED8-B444-5A1F3BDE247F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{909E7907-540A-4ED8-B444-5A1F3BDE247F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

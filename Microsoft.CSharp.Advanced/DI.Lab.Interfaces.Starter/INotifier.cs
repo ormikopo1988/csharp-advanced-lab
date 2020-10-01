@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DI.Lab.Shared.Starter;
+using System;
 
 namespace DI.Lab.Interfaces.Starter
 {
@@ -6,3 +7,4 @@ namespace DI.Lab.Interfaces.Starter
     {
         void SendReceipt(OrderInfo orderInfo);
     }
+}
