@@ -11,7 +11,7 @@ namespace CSharpGenericsLab.Starter
             ScenarioOne();
             ScenarioTwo();
             ScenarioThree();
-            //ScenarioFour();
+            ScenarioFour();
             //ScenarioFive();
         }
 
@@ -180,6 +180,8 @@ namespace CSharpGenericsLab.Starter
 
         static void ScenarioThree()
         {
+            Console.WriteLine("");
+            Console.WriteLine("*** ScenarioThree ***");
             // Create a generic collection that contains strongly typed objects that can be accessed by index.
             // Internally, it uses an array whose size is dynamically increased as required.
             // The collection is not guaranteed to be sorted.
@@ -280,18 +282,33 @@ namespace CSharpGenericsLab.Starter
 
             // Create a generic collection with five strings and default capacity and give it the name "shirts".
             // Put inside the collection the strings "GreenShirt", "BlueShirt", "RedShirt", "OrangeShirt", "YellowShirt".
+            Stack<string> shirts = new Stack<string>();
+            shirts.Push("GreenShirt");
+            shirts.Push("BlueShirt");
+            shirts.Push("RedShirt");
+            shirts.Push("OrangeShirt");
+            shirts.Push("YellowShirt");
 
 
             // Write code to enumerate through the elements of the collection.
+            foreach (string aShirt in shirts)
+            {
+                Console.WriteLine(aShirt);
+            }
 
 
             // Write code to get the "RedShirt" from the collection
+            Console.WriteLine("\nShirt: '{0}'", shirts.Pop());
+            Console.WriteLine("Shirt: '{0}'", shirts.Pop());
+            Console.WriteLine("Shirt: {0}", shirts.Peek());
 
 
             // Delete all the elements from the collection.
+            shirts.Clear();
 
 
             // Print the number of the elements in the collection.
+            Console.WriteLine("\bshirts.Count = {0}", shirts.Count);
 
         }
 
