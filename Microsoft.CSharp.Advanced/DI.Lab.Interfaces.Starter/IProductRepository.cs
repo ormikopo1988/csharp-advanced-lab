@@ -6,3 +6,4 @@ namespace DI.Lab.Interfaces.Starter
     {
         void Save();
     }
+}

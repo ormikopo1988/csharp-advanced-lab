@@ -1,4 +1,5 @@
 ﻿using DI.Lab.Interfaces.Starter;
+using DI.Lab.Shared.Starter;
 using System;
 
 namespace DI.Lab.Services.Starter

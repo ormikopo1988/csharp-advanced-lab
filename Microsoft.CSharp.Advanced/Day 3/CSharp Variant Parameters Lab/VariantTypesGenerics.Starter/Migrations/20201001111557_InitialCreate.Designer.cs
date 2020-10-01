@@ -2,8 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using VariantTypesGenerics.Final.DbAccess;
+using VariantTypesGenerics.Starter.DbAccess;
 
 namespace VariantTypesGenerics.Starter.Migrations
 {
