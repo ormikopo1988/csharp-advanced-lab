@@ -135,7 +135,7 @@ namespace VariantTypesGenerics.Starter
             employeeRepository.Commit();
         }
 
-        static void AddManagers(IRepository<Employee> employeeRepository)
+        static void AddManagers(IWriteRepo<Manager> employeeRepository)
         {
             employeeRepository.Add(new Manager { Name = "Alex" });
             employeeRepository.Commit();
