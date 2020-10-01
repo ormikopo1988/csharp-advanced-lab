@@ -5,6 +5,8 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace AsyncApiCore.Starter.Services
 {
@@ -17,7 +19,7 @@ namespace AsyncApiCore.Starter.Services
             _logger = logger;
         }
 
-        public List<User> GetAll()
+        public async Task<List<User>> GetAllAsync(CancellationToken cancellationToken = default)
         {
             try
             {
@@ -37,7 +39,7 @@ namespace AsyncApiCore.Starter.Services
             return null;
         }
 
-        public User GetById(int id)
+        public async Task<User> GetByIdAsync(int id, CancellationToken cancellationToken = default)
         {
             try
             {

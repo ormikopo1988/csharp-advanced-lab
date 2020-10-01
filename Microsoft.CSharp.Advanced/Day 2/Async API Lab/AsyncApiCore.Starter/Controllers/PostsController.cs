@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace AsyncApiCore.Starter.Controllers
 {
@@ -20,11 +22,11 @@ namespace AsyncApiCore.Starter.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
         {
             try
             {
-                var posts = _postService.GetAll();
+                var posts =await _postService.GetAllAsync(cancellationToken);
 
                 return new OkObjectResult(posts);
             }
@@ -37,7 +39,7 @@ namespace AsyncApiCore.Starter.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetByID(int id)
+        public async Task<IActionResult> GetByID(int id, CancellationToken cancellationToken)
         {
             try
             {
@@ -46,7 +48,7 @@ namespace AsyncApiCore.Starter.Controllers
                     return BadRequest();
                 }
 
-                var post = _postService.GetById(id);
+                var post =await _postService.GetByIdAsync(id,cancellationToken );
 
                 if (post == null)
                 {

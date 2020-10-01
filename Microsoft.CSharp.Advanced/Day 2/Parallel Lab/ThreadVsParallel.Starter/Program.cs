@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -21,19 +22,24 @@ namespace ThreadVsParallel.Starter
             // - $"{i + 1} iteration: {CallThreadProcess}", where CallThreadProcess is a placeholder for a call to ThreadProcess()
 
             // Your code here...
-
+            for (int i = 0; i < 11; i++)
+            {
+              
+                Console.WriteLine("${" + i + 1 + "} iteration: {"+ ParallelProcess() + "}, where CallThreadProcess is a placeholder for a call to ParallelProcess()") ;
+                Console.WriteLine("${" + i + 1 + "} iteration: {" + ThreadProcess() + "},where CallThreadProcess is a placeholder for a call to ThreadProcess()");
+            }
             // Exercise 2
-            //var path = Directory.GetCurrentDirectory();
+            var path = Directory.GetCurrentDirectory();
 
-            //var files = Directory.GetFiles(path + @"\pictures", "*.jpg");
+            var files = Directory.GetFiles(path + @"\pictures", "*.jpg");
 
-            //var alteredPathParallel = path + @"\alteredPathParallel";
-            //var alteredPathThread = path + @"\alteredPathThread";
-            //var alteredPathNormal = path + @"\alteredPathNormal";
+            var alteredPathParallel = path + @"\alteredPathParallel";
+            var alteredPathThread = path + @"\alteredPathThread";
+            var alteredPathNormal = path + @"\alteredPathNormal";
 
-            //Directory.CreateDirectory(alteredPathParallel);
-            //Directory.CreateDirectory(alteredPathThread);
-            //Directory.CreateDirectory(alteredPathNormal);
+            Directory.CreateDirectory(alteredPathParallel);
+            Directory.CreateDirectory(alteredPathThread);
+            Directory.CreateDirectory(alteredPathNormal);
 
             // Write a for loop (i=0 to i=10)
             // Inside the for loop write three messages in the console:
@@ -45,7 +51,11 @@ namespace ThreadVsParallel.Starter
             // - The appropriate alteredPath variable based on the model execution of code.
 
             // Your code here...
-
+            for (int i = 0; i < 11; i++)
+            {
+               // Console.WriteLine( i + 1 + " iteration: " + ParallelExecution(files, alteredPathParallel));
+                
+            }
             Console.ReadLine();
         }
 
@@ -54,26 +64,29 @@ namespace ThreadVsParallel.Starter
         private static string ParallelProcess()
         {
             // Initialize new Stopwatch
-
-            // Your code here...
+           // Your code here...
+             Stopwatch stopwatch= new Stopwatch();
 
             // Start Stopwatch
-
+            
             // Your code here...
-
+                stopwatch.Start();
             // Write a for loop using the Parallel.For TPL construct from 0 to Environment.ProcessorsCount and pass it a simple Action giving it an input with name index 
             // and also the CurrentThread ManagedThreadId. The format used in the console woule be: "Printing {0} thread = {1}", where {0} is the 
             // iterator index passed as an input in the Action<int> of the body of Parallel.For loop construct.
 
             // Your code here...
-
+            Parallel.For (0, Environment.ProcessorCount, i =>
+            {
+                Console.WriteLine("Printing {0} thread = {1}",i);
+            });
             // Stop Stopwatch
 
             // Your code here...
-
+            stopwatch.Stop();
             // Return "ParallelProcess: Time in milliseconds {0}", where {0} is the time elapsed in milliseconds.
-
-            return string.Empty; // Just for the code to compile - Your return statement goes here...
+            return DateTime.Now.Millisecond.ToString() ;
+           // return string.Empty; // Just for the code to compile - Your return statement goes here...
         }
 
         private static string ThreadProcess()
@@ -81,11 +94,11 @@ namespace ThreadVsParallel.Starter
             // Initialize new Stopwatch
 
             // Your code here...
-
+            Stopwatch stopwatch = new Stopwatch();
             // Start Stopwatch
 
             // Your code here...
-
+            stopwatch.Start();
             // Write a for loop using the Enumerable.Range loop construct from 0 to Environment.ProcessorsCount
             // Apply the .Select method of LINQ to the output of Enumerable.Range and pass it an input of type Func<int, Thread>.
             // Name the input integer as index and create a new Thread that will just print the index along with the CurrentThread ManagedThreadId in the format
@@ -94,7 +107,10 @@ namespace ThreadVsParallel.Starter
             // var threads = Enumerable.Range(...).Select(...).ToList();
 
             // Your code here...
+            //Enumerable.Range(0, Environment.ProcessorCount).Select(x => new Thread())
+            //{
 
+            //}).toList;
             // Write a foreach loop hear that will iterate over threads and will call .Start() to start each one of them
 
             // Your code here...
@@ -102,14 +118,14 @@ namespace ThreadVsParallel.Starter
             // Write a foreach loop hear that will iterate over threads and will call .Join() to wait for each one of them to finish execution
 
             // Your code here...
-
+            
             // Stop Stopwatch
-
+            
             // Your code here...
-
+                stopwatch.Stop();
             // Return "ThreadProcess: Time in milliseconds {0}", where {0} is the time elapsed in milliseconds.
-
-            return string.Empty; // Just for the code to compile - Your return statement goes here...
+            return DateTime.Now.Millisecond.ToString();
+           // return string.Empty; // Just for the code to compile - Your return statement goes here...
         }
 
         #endregion
@@ -121,11 +137,11 @@ namespace ThreadVsParallel.Starter
             // Initialize new Stopwatch
 
             // Your code here...
-
+            Stopwatch stopwatch = new Stopwatch();
             // Start Stopwatch
 
             // Your code here...
-
+            stopwatch.Start();
             // Write a parallel loop using Parallel.Foreach construct. 
             // Pass in the input files argument (string[]) as the first argument
             // Create a ParallelOptions object and set the MaxDegreeOfParallelism to Environment.ProcessorCount and pass it as the second argument.
@@ -133,11 +149,21 @@ namespace ThreadVsParallel.Starter
             // and inside its body will call: RotateImageFile(currentFile, alteredPath);
 
             // Your code here...
+            ParallelOptions paralleloptions = new ParallelOptions
+            {
+                MaxDegreeOfParallelism = Environment.ProcessorCount
+
+            };
+
+            //Parallel.ForEach(files, paralleloptions,
+            //   Action<string> action=new Action {
+            //    RotateImageFile(currentFile, alteredPath);
+            //});
 
             // Stop Stopwatch
 
             // Your code here...
-
+            stopwatch.Stop();
             // Write in the console: "Time passed in parallel execution: {0}", where {0} is the time elapsed in milliseconds.
 
             Console.WriteLine();
