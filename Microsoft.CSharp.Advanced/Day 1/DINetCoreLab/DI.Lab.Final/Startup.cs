@@ -25,16 +25,16 @@ namespace DI.Lab.Final
         {
             services.AddControllersWithViews();
 
-            //services.AddSingleton<ICustomerRepository, CustomerRepository>();
-            //services.AddSingleton<IProductRepository, ProductRepository>();
-            //services.AddSingleton<ICustomerProcessor, CustomerProcessor>();
-            //services.AddSingleton<INotifier, Notifier>();
-            //services.AddSingleton<IBillingProcessor, BillingProcessor>();
-            //services.AddSingleton<IOrderProcessor, OrderProcessor>();
+            services.AddSingleton<ICustomerRepository, CustomerRepository>();
+            services.AddSingleton<IProductRepository, ProductRepository>();
+            services.AddSingleton<ICustomerProcessor, CustomerProcessor>();
+            services.AddSingleton<INotifier, Notifier>();
+            services.AddSingleton<IBillingProcessor, BillingProcessor>();
+            services.AddSingleton<IOrderProcessor, OrderProcessor>();
 
             // Or use extension methods
-            services.AddOrderLibServices();
-            services.AddOrderLibRepositories();
+            //services.AddOrderLibServices();
+            //services.AddOrderLibRepositories();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

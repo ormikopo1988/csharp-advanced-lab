@@ -14,11 +14,11 @@ namespace ThreadVsParallel
         static void Main(string[] args)
         {
             // Exercise 1
-            for (int i = 0; i < 10; i++)
-            {
-                Console.WriteLine($"{i + 1} iteration: {ParallelProcess()}");
-                Console.WriteLine($"{i + 1} iteration: {ThreadProcess()}");
-            }
+            //for (int i = 0; i < 10; i++)
+            //{
+            //    Console.WriteLine($"{i + 1} iteration: {ParallelProcess()}");
+            //    Console.WriteLine($"{i + 1} iteration: {ThreadProcess()}");
+            //}
 
             // Exercise 2
             var path = Directory.GetCurrentDirectory();
@@ -39,8 +39,8 @@ namespace ThreadVsParallel
                 ParallelExecution(files, alteredPathParallel);
                 Console.WriteLine($"{i + 1} iteration: ThreadExecution");
                 ThreadExecution(files, alteredPathThread);
-                Console.WriteLine($"{i + 1} iteration: NormalExecution");
-                NormalExecution(files, alteredPathNormal);
+                //Console.WriteLine($"{i + 1} iteration: NormalExecution");
+                //NormalExecution(files, alteredPathNormal);
             }
 
             Console.ReadLine();
