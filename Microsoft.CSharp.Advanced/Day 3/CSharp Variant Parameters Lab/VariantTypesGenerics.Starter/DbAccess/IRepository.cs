@@ -3,12 +3,20 @@ using System.Linq;
 
 namespace VariantTypesGenerics.Starter.DbAccess
 {
-    public interface IRepository<T> : IDisposable
+    public interface IRepository<T> : IReadOnlyRepository<T>, IWriteOnlyRepository<T>
     {
-        void Add(T newEntity);
-        void Delete(T entity);
-        int Commit();
+    }
+
+    public interface IReadOnlyRepository<out T> : IDisposable
+    {
         T FindById(int id);
         IQueryable<T> FindAll();
+    }
+
+    public interface IWriteOnlyRepository<in T> : IDisposable
+    {
+        int Commit();
+        void Add(T newEntity);
+        void Delete(T entity);
     }
 }

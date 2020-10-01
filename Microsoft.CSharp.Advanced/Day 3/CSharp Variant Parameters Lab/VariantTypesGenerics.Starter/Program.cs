@@ -145,7 +145,7 @@ namespace VariantTypesGenerics.Starter
             Console.WriteLine(employeeRepository.FindAll().Count());
         }
 
-        static void DumpPeople(IRepository<Employee> employeeRepository)
+        static void DumpPeople(IReadOnlyRepository<Person> employeeRepository)
         {
             var employees = employeeRepository.FindAll();
 
