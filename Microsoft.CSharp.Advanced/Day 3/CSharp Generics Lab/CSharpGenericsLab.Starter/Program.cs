@@ -12,7 +12,7 @@ namespace CSharpGenericsLab.Starter
             ScenarioTwo();
             ScenarioThree();
             ScenarioFour();
-            //ScenarioFive();
+            ScenarioFive();
         }
 
         static void ScenarioOne()
@@ -274,6 +274,8 @@ namespace CSharpGenericsLab.Starter
 
         static void ScenarioFour()
         {
+            Console.WriteLine("");
+            Console.WriteLine("*** ScenarioFour ***");
             // The elements of the collection are enumerated and thus do not change the state of the collection.
             // The storage of the information will be temporary; that is, you might want to discard an element after retrieving its value.
             // Choose the collection that after adding the elements you can access the information in the reverse order than the one that were originally stored.
@@ -314,6 +316,8 @@ namespace CSharpGenericsLab.Starter
 
         static void ScenarioFive()
         {
+            Console.WriteLine("");
+            Console.WriteLine("*** ScenarioFive ***");
             // Create a collection that represents a set of values.
             // You need a collection that is based on the model of mathematical sets and 
             // provides high-performance set operations similar to accessing the keys of a Dictionary<TKey,TValue>
@@ -321,32 +325,50 @@ namespace CSharpGenericsLab.Starter
             // Performance for your application is more important than order or element duplication.
 
             // Create a collection of integers called "evenNumbers"
-            
+            HashSet<int> evenNumbers = new HashSet<int>();
+
 
             // Create a collection of integers called "oddNumbers"
-            
+            HashSet<int> oddNumbers = new HashSet<int>();
+
 
             // Uncomment this when you chose and created the two collections above
-            //for (int i = 0; i < 5; i++)
-            //{
-            //    // Populate numbers with just even numbers.
-            //    evenNumbers.Add(i * 2);
+            for (int i = 0; i < 5; i++)
+            {
+                // Populate numbers with just even numbers.
+                evenNumbers.Add(i * 2);
 
-            //    // Populate oddNumbers with just odd numbers.
-            //    oddNumbers.Add((i * 2) + 1);
-            //}
+                // Populate oddNumbers with just odd numbers.
+                oddNumbers.Add((i * 2) + 1);
+            }
 
             // Iterate through the collection "evenNumbers" and print the elements to the console
-            
-            
+            Console.Write("Iterating through evenNumbers");
+            foreach (int i in evenNumbers)
+            {
+                Console.Write(" {0}", i);
+            }
+
+
             // Iterate through the collection "oddNumbers" and print the elements to the console
-            
+            Console.Write("Iterating through oddNumbers");
+            foreach (int i in oddNumbers)
+            {
+                Console.Write(" {0}", i);
+            }
+
 
             // Create a new collection populated with even numbers.
-            
+            HashSet<int> numbers = new HashSet<int>(evenNumbers);
+
 
             // Iterate through the collection "numbers" and print the elements to the console//
-            
+            Console.Write("Iterating through numbers");
+            foreach (int i in numbers)
+            {
+                Console.Write(" {0}", i);
+            }
+
         }
     }
 
