@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 
 namespace CSharpGenericsLab.Starter
 {
@@ -6,8 +8,8 @@ namespace CSharpGenericsLab.Starter
     {
         static void Main(string[] args)
         {
-            ScenarioOne();
-            //ScenarioTwo();
+            //ScenarioOne();
+            ScenarioTwo();
             //ScenarioThree();
             //ScenarioFour();
             //ScenarioFive();
@@ -23,17 +25,37 @@ namespace CSharpGenericsLab.Starter
             // Create a generic collection with five strings and default capacity and give it the name "requests".
             // Put inside the collection the strings "Request1", "Request2", "Request3", "Request4", "Request5".
 
+            var requests = new ConcurrentQueue<string>();
+            requests.Enqueue("Request1");
+            requests.Enqueue("Request2");
+            requests.Enqueue("Request3");
+            requests.Enqueue("Request4");
+            requests.Enqueue("Request5");
 
             // Write code to enumerate through the elements of the collection.
-
+            foreach (var item in requests)
+            {
+                Console.WriteLine(item);
+            }
 
             // Write code to get the "Request2" from the collection
+            requests.TryDequeue(out string item1);
+            Console.WriteLine("Dequeued '{0}'", item1);
 
+            requests.TryDequeue(out string item2);
+            Console.WriteLine("Dequeued '{0}'", item2);
+
+            requests.TryDequeue(out string item3);
+            Console.WriteLine("Dequeued '{0}'", item3);
+
+            requests.TryPeek(out string item4);
+            Console.WriteLine("Peek at next request: {0}", item4);
 
             // Delete all the elements from the collection.
-
+            requests.Clear();
 
             // Print the number of the elements in the collection.
+            Console.WriteLine("\brequests.Count = {0}", requests.Count);
 
         }
 
@@ -47,7 +69,7 @@ namespace CSharpGenericsLab.Starter
 
             // Create the sorted collection here.
             // Name the sorted collection "openWith".
-
+            var openWith = new SortedDictionary<string, string>();
 
             // Add some elements to the collection.
             // 1st item => Key: "txt", Value: "notepad.exe"
@@ -55,49 +77,114 @@ namespace CSharpGenericsLab.Starter
             // 3rd item => Key: "dib", Value: "paint.exe"
             // 4th item => Key: "rtf", Value: "wordpad.exe"
 
+            openWith.Add("txt", "notepad.exe");
+            openWith.Add("bmp", "paint.exe");
+            openWith.Add("dib", "paint.exe");
+            openWith.Add("rtf", "wordpad.exe");
+
 
             // Try add an element with the same key, e.g. "txt".
             // Surround with try catch block. The catch block will expect an ArgumentException.
             // Inside the catch block write a message that the element with the specified key already exists.
 
+            try
+            {
+                openWith.Add("txt", "notepad2.exe");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                Console.WriteLine();
+            }
 
             // Access the "rtf" element of the collection by using the string indexer and write to console.
+
+            Console.WriteLine("item rtf value: {0}", openWith["rtf"]);
 
 
             // Use the indexer "rtf" to change the value associated with it.
             // Write the new value to the console.
 
+            openWith["rtf"] = "wordpad2.exe";
+            Console.WriteLine("Item rtf value after update: {0}", openWith["rtf"]);
+
 
             // Add a new element in the collection by setting the indexer for a key "doc" with a value "winword.exe".
+
+            openWith.Add("doc", "winword.exe");
 
 
             // Use the indexer to request a key called "tif" that does not exist in the collection.
             // Surround with try / catch block with a KeyNotFoundException and write the error message 
             // that the specified key was not found in the console.
 
+            try
+            {
+                Console.WriteLine("item tif value: {0}", openWith["tif"]);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                Console.WriteLine();
+            }
+
 
             // Use a more efficient way to find the value in the collection by 
             // using a try get value logic that the collection has.
             // Try find the "tif" element in the collection and print its value to the console.
 
+            openWith.TryGetValue("tif", out string value);
+            Console.WriteLine("item tif value: {0}", value);
+            Console.WriteLine();
+
 
             // Check if the key "ht" is contained inside the collection.
             // If not then add it with the value of "hypertrm.exe" to the collection.
+            if (!openWith.TryGetValue("ht", out string value2))
+            {
+                openWith.Add("ht", "hypertrm.exe");
+            }
 
 
             // Enumerate the collection elements and print their key and value to the console.
+            foreach (var item in openWith)
+            {
+                Console.WriteLine("Key: {0} | Value: {1}, ", item.Key, item.Value);
+            }
+            Console.WriteLine();
 
 
             // Get the values of the collection alone
+            SortedDictionary<string, string>.ValueCollection valueColl = openWith.Values;
 
+            // Iterate the values of the collection and print them to the console.
+            Console.WriteLine();
+
+            foreach (string s in valueColl)
+            {
+                Console.WriteLine("Value = {0}", s);
+            }
+            Console.WriteLine();
 
             // Get the keys of the collection alone
+            SortedDictionary<string, string>.KeyCollection keysColl = openWith.Keys;
 
+            // Iterate the keys of the collection and print them to the console.
+            foreach (string s in keysColl)
+            {
+                Console.WriteLine("Key = {0}", s);
+            }
+            Console.WriteLine();
 
             // Remove the "doc" element from the collection.
-
+            openWith.Remove("doc");
 
             // Enumerate the collection elements and print their key and value to the console.
+            foreach (var item in openWith)
+            {
+                Console.WriteLine("Key: {0} | Value: {1}, ", item.Key, item.Value); 
+            }
+            Console.WriteLine();
 
         }
 
