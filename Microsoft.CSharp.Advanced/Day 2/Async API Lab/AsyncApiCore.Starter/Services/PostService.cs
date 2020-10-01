@@ -5,6 +5,9 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Threading.Tasks;
+using System.Net.Http;
+
 
 namespace AsyncApiCore.Starter.Services
 {
@@ -17,11 +20,13 @@ namespace AsyncApiCore.Starter.Services
             _logger = logger;
         }
 
-        public List<Post> GetAll()
+        public async Task<List<Post>> GetAll()
         {
             try
             {
                 // TODO - Change this code in order to use HttpClient instead of WebClient and call GetAsync instead of DownloadString on the client object instance.
+
+
                 using (var client = new WebClient())
                 {
                     var posts = client.DownloadString("https://jsonplaceholder.typicode.com/posts");
@@ -37,7 +42,7 @@ namespace AsyncApiCore.Starter.Services
             return null;
         }
 
-        public Post GetById(int id)
+        public async Task<Post> GetById(int id)
         {
             try
             {
@@ -57,7 +62,7 @@ namespace AsyncApiCore.Starter.Services
             return null;
         }
 
-        public List<Post> GetPostsForUser(int userID)
+        public async Task<List<Post>> GetPostsForUser(int userID)
         {
             try
             {

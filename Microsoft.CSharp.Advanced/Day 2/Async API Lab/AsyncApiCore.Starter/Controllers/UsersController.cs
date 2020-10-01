@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Threading.Tasks;
 
 namespace AsyncApiCore.Starter.Controllers
 {
@@ -22,11 +23,11 @@ namespace AsyncApiCore.Starter.Controllers
         }
 
         [HttpGet]
-        public ActionResult GetAll()
+        public async Task<ActionResult> GetAll()
         {
             try
             {
-                var users = _userService.GetAll();
+                var users = await _userService.GetAll();
 
                 return new OkObjectResult(users);
             }
@@ -39,7 +40,7 @@ namespace AsyncApiCore.Starter.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult GetByID(int id)
+        public async Task<ActionResult> GetByID(int id)
         {
             try
             {
@@ -48,14 +49,14 @@ namespace AsyncApiCore.Starter.Controllers
                     return BadRequest();
                 }
 
-                var user = _userService.GetById(id);
+                var user = await _userService.GetById(id);
 
                 if (user == null)
                 {
                     return NotFound();
                 }
 
-                user.Posts = _postService.GetPostsForUser(user.ID);
+                user.Posts = await _postService.GetPostsForUser(user.ID);
 
                 return new OkObjectResult(user);
             }

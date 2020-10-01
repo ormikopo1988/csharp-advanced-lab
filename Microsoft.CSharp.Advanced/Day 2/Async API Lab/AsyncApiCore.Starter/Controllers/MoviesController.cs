@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Threading.Tasks;
 
 namespace AsyncApiCore.Starter.Controllers
 {
@@ -21,11 +22,11 @@ namespace AsyncApiCore.Starter.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
             try
             {
-                var movies = _movieRepository.GetAll();
+                var movies = await _movieRepository.GetAll();
 
                 return new OkObjectResult(movies);
             }
@@ -38,7 +39,7 @@ namespace AsyncApiCore.Starter.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetByID(int id)
+        public async Task<IActionResult> GetByID(int id)
         {
             try
             {
@@ -47,7 +48,7 @@ namespace AsyncApiCore.Starter.Controllers
                     return BadRequest();
                 }
 
-                var movie = _movieRepository.GetById(id);
+                var movie = await _movieRepository.GetById(id);
 
                 if (movie == null)
                 {
@@ -65,7 +66,7 @@ namespace AsyncApiCore.Starter.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post(Movie movie)
+        public async Task<IActionResult> Post(Movie movie)
         {
             try
             {
@@ -74,7 +75,7 @@ namespace AsyncApiCore.Starter.Controllers
                     return BadRequest();
                 }
 
-                var moviesInserted = _movieRepository.Save(movie);
+                var moviesInserted = await _movieRepository.Save(movie);
 
                 if (moviesInserted == 1)
                 {

@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace AsyncApiCore.Starter.Repositories
 {
@@ -38,22 +39,22 @@ namespace AsyncApiCore.Starter.Repositories
             _connectionString = configuration.GetValue<string>("ConnectionStrings:Default");
         }
 
-        private IDbConnection GetConnection()
+        private async Task<IDbConnection> GetConnection()
         {
             var connection = new SqlConnection(_connectionString);
 
-            connection.Open();
+            await connection.OpenAsync();
 
             return connection;
         }
 
-        public List<Movie> GetAll()
+        public async Task<List<Movie>> GetAll()
         {
             try
             {
-                using (var connection = GetConnection())
+                using (var connection = await GetConnection())
                 {
-                    var movies = connection.Query<Movie>("SELECT * FROM [dbo].[Movie] WITH (NOLOCK)");
+                    var movies = await connection.QueryAsync<Movie>("SELECT * FROM [dbo].[Movie] WITH (NOLOCK)");
 
                     return movies.ToList();
                 }
@@ -66,13 +67,13 @@ namespace AsyncApiCore.Starter.Repositories
             }
         }
 
-        public Movie GetById(int id)
+        public async Task<Movie> GetById(int id)
         {
             try
             {
-                using (var connection = GetConnection())
+                using (var connection = await GetConnection())
                 {
-                    var movie = connection.QueryFirstOrDefault<Movie>("SELECT * FROM [dbo].[Movie] WITH (NOLOCK) WHERE Id=@Id", new { Id = id });
+                    var movie = await connection.QueryFirstOrDefaultAsync<Movie>("SELECT * FROM [dbo].[Movie] WITH (NOLOCK) WHERE Id=@Id", new { Id = id });
 
                     if (movie == null)
                     {
@@ -90,15 +91,15 @@ namespace AsyncApiCore.Starter.Repositories
             }
         }
 
-        public int Save(Movie movie)
+        public async Task<int> Save(Movie movie)
         {
             try
             {
                 string sql = "INSERT INTO [dbo].[Movie] (Name, Description, AppropriateAbove, ImdbRating) Values (@Name, @Description, @AppropriateAbove, @ImdbRating);";
 
-                using (var connection = GetConnection())
+                using (var connection = await GetConnection())
                 {
-                    var affectedRows = connection.Execute(sql, new { movie.Name, movie.Description, movie.AppropriateAbove, movie.ImdbRating });
+                    var affectedRows = await connection.ExecuteAsync(sql, new { movie.Name, movie.Description, movie.AppropriateAbove, movie.ImdbRating });
 
                     return affectedRows;
                 }
