@@ -1,3 +1,7 @@
+using DI.Lab.Interfaces.Starter.Repositories;
+using DI.Lab.Interfaces.Starter.Services;
+using DI.Lab.Services.Starter.Repositories;
+using DI.Lab.Services.Starter.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -18,7 +22,16 @@ namespace DI.Lab.Starter
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.AddControllersWithViews();
+
+
+            services.AddSingleton<ICustomerRepository, CustomerRepository>();
+            services.AddSingleton<IProductRepository, ProductRepository>();
+            services.AddSingleton<ICustomerProcessor, CustomerProcessor>();
+            services.AddSingleton<INotifier, Notifier>();
+            services.AddSingleton<IBillingProcessor, BillingProcessor>();
+            services.AddSingleton<IOrderProcessor, OrderProcessor>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
