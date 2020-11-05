@@ -20,7 +20,11 @@ namespace ThreadVsParallel.Starter
             // - $"{i + 1} iteration: {CallParallelProcess}", where CallParallelProcess is a placeholder for a call to ParallelProcess()
             // - $"{i + 1} iteration: {CallThreadProcess}", where CallThreadProcess is a placeholder for a call to ThreadProcess()
 
-            // Your code here...
+            for (int i=0; i < 10; i++)
+            {
+                Console.WriteLine($"{i + 1} iteration: {ParallelProcess()}");
+                Console.WriteLine($"{i + 1} iteration: {ThreadProcess()}");
+            }
 
             // Exercise 2
             //var path = Directory.GetCurrentDirectory();
@@ -55,36 +59,39 @@ namespace ThreadVsParallel.Starter
         {
             // Initialize new Stopwatch
 
-            // Your code here...
+            var stopWatch = new Stopwatch();
 
             // Start Stopwatch
-
-            // Your code here...
+            stopWatch.Start();
 
             // Write a for loop using the Parallel.For TPL construct from 0 to Environment.ProcessorsCount and pass it a simple Action giving it an input with name index 
             // and also the CurrentThread ManagedThreadId. The format used in the console woule be: "Printing {0} thread = {1}", where {0} is the 
             // iterator index passed as an input in the Action<int> of the body of Parallel.For loop construct.
 
-            // Your code here...
+            Parallel.For(0, Environment.ProcessorCount, index => {
+                Console.WriteLine(String.Format("Printing {0} thread = {1}", index, Thread.CurrentThread.ManagedThreadId));
+            });
 
             // Stop Stopwatch
-
-            // Your code here...
+            stopWatch.Stop();
 
             // Return "ParallelProcess: Time in milliseconds {0}", where {0} is the time elapsed in milliseconds.
 
-            return string.Empty; // Just for the code to compile - Your return statement goes here...
+            return String.Format("ParallelProcess: Time in milliseconds {0}", stopWatch.Elapsed.TotalMilliseconds.ToString());
         }
+
+        //private static void index(int arg1, ParallelLoopState arg2)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         private static string ThreadProcess()
         {
             // Initialize new Stopwatch
-
-            // Your code here...
+            var stopWatch = new Stopwatch();
 
             // Start Stopwatch
-
-            // Your code here...
+            stopWatch.Start();
 
             // Write a for loop using the Enumerable.Range loop construct from 0 to Environment.ProcessorsCount
             // Apply the .Select method of LINQ to the output of Enumerable.Range and pass it an input of type Func<int, Thread>.
@@ -93,23 +100,22 @@ namespace ThreadVsParallel.Starter
             // Next apply .ToList() to the output of the Select LINQ method and name the output variable as threads.
             // var threads = Enumerable.Range(...).Select(...).ToList();
 
-            // Your code here...
+            var threads = Enumerable.Range(0, Environment.ProcessorCount).Select(index => new Thread(() => {
+                Console.WriteLine(string.Format("Printing {0} thread = {1}", index, Thread.CurrentThread.ManagedThreadId));
+            })).ToList();
 
             // Write a foreach loop hear that will iterate over threads and will call .Start() to start each one of them
-
-            // Your code here...
+            threads.ForEach(action => action.Start());
 
             // Write a foreach loop hear that will iterate over threads and will call .Join() to wait for each one of them to finish execution
-
-            // Your code here...
+            threads.ForEach(action => action.Join());
 
             // Stop Stopwatch
-
-            // Your code here...
+            stopWatch.Stop();
 
             // Return "ThreadProcess: Time in milliseconds {0}", where {0} is the time elapsed in milliseconds.
 
-            return string.Empty; // Just for the code to compile - Your return statement goes here...
+            return String.Format("ThreadProcess: Time in milliseconds {0}", stopWatch.Elapsed.TotalMilliseconds.ToString());
         }
 
         #endregion
