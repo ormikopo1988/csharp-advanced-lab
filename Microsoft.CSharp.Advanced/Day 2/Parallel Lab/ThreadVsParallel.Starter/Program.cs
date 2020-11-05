@@ -20,24 +20,24 @@ namespace ThreadVsParallel.Starter
             // - $"{i + 1} iteration: {CallParallelProcess}", where CallParallelProcess is a placeholder for a call to ParallelProcess()
             // - $"{i + 1} iteration: {CallThreadProcess}", where CallThreadProcess is a placeholder for a call to ThreadProcess()
 
-            for (int i=0; i < 10; i++)
-            {
-                Console.WriteLine($"{i + 1} iteration: {ParallelProcess()}");
-                Console.WriteLine($"{i + 1} iteration: {ThreadProcess()}");
-            }
+            //for (int i=0; i < 10; i++)
+            //{
+            //    Console.WriteLine($"{i + 1} iteration: {ParallelProcess()}");
+            //    Console.WriteLine($"{i + 1} iteration: {ThreadProcess()}");
+            //}
 
             // Exercise 2
-            //var path = Directory.GetCurrentDirectory();
+            var path = Directory.GetCurrentDirectory();
 
-            //var files = Directory.GetFiles(path + @"\pictures", "*.jpg");
+            var files = Directory.GetFiles(path + @"\pictures", "*.jpg");
 
-            //var alteredPathParallel = path + @"\alteredPathParallel";
-            //var alteredPathThread = path + @"\alteredPathThread";
-            //var alteredPathNormal = path + @"\alteredPathNormal";
+            var alteredPathParallel = path + @"\alteredPathParallel";
+            var alteredPathThread = path + @"\alteredPathThread";
+            var alteredPathNormal = path + @"\alteredPathNormal";
 
-            //Directory.CreateDirectory(alteredPathParallel);
-            //Directory.CreateDirectory(alteredPathThread);
-            //Directory.CreateDirectory(alteredPathNormal);
+            Directory.CreateDirectory(alteredPathParallel);
+            Directory.CreateDirectory(alteredPathThread);
+            Directory.CreateDirectory(alteredPathNormal);
 
             // Write a for loop (i=0 to i=10)
             // Inside the for loop write three messages in the console:
@@ -48,7 +48,17 @@ namespace ThreadVsParallel.Starter
             // - The files array
             // - The appropriate alteredPath variable based on the model execution of code.
 
-            // Your code here...
+            for (int i = 0; i < 10; i++)
+            {
+                Console.WriteLine($"{i + 1} iteration: ParallelExecution");
+                ParallelExecution(files, alteredPathParallel);
+
+                //Console.WriteLine($"{i + 1} iteration: ThreadExecution");
+                //ThreadExecution(files, alteredPathThread);
+
+                //Console.WriteLine($"{i + 1} iteration: NormalExecution");
+                //NormalExecution(files, alteredPathNormal);
+            }
 
             Console.ReadLine();
         }
@@ -79,11 +89,6 @@ namespace ThreadVsParallel.Starter
 
             return String.Format("ParallelProcess: Time in milliseconds {0}", stopWatch.Elapsed.TotalMilliseconds.ToString());
         }
-
-        //private static void index(int arg1, ParallelLoopState arg2)
-        //{
-        //    throw new NotImplementedException();
-        //}
 
         private static string ThreadProcess()
         {
@@ -125,12 +130,10 @@ namespace ThreadVsParallel.Starter
         private static void ParallelExecution(string[] files, string alteredPath)
         {
             // Initialize new Stopwatch
-
-            // Your code here...
+            var stopWatch = new Stopwatch();
 
             // Start Stopwatch
-
-            // Your code here...
+            stopWatch.Start();
 
             // Write a parallel loop using Parallel.Foreach construct. 
             // Pass in the input files argument (string[]) as the first argument
@@ -138,15 +141,19 @@ namespace ThreadVsParallel.Starter
             // Create an Action<string> body and pass it as the third argument. The Action<string> will take each as input a string called "currentFile" 
             // and inside its body will call: RotateImageFile(currentFile, alteredPath);
 
-            // Your code here...
+            var parallelOptions = new ParallelOptions
+            {
+                MaxDegreeOfParallelism = Environment.ProcessorCount
+            };
+
+            Parallel.ForEach(files, parallelOptions, (string currentFile) => {
+                RotateImageFile(currentFile, alteredPath);
+            });
 
             // Stop Stopwatch
+            stopWatch.Stop();
 
-            // Your code here...
-
-            // Write in the console: "Time passed in parallel execution: {0}", where {0} is the time elapsed in milliseconds.
-
-            Console.WriteLine();
+            Console.WriteLine(String.Format("Time passed in parallel execution: {0}", stopWatch.ElapsedMilliseconds.ToString()));
         }
 
         private static void ThreadExecution(string[] files, string alteredPath)
