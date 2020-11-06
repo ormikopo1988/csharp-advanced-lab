@@ -109,7 +109,7 @@ namespace CSharpGenericsLab.Starter
             // Elements in this collection can be accessed using an integer index.
             // Indexes in this collection are zero - based.
 
-            // Create a Part object with two properties => PartName: string & PartId: int
+            // Create a Part class with two properties => PartName: string & PartId: int
             // Override the ToString() method of it and put: return "ID: " + PartId + "   Name: " + PartName;
             // Make sure you make the Part class implement the IEquatable<Part> interface.
             // Implement the necessary methods as follows:
@@ -212,10 +212,10 @@ namespace CSharpGenericsLab.Starter
             // Performance for your application is more important than order or element duplication.
 
             // Create a collection of integers called "evenNumbers"
-            
+
 
             // Create a collection of integers called "oddNumbers"
-            
+
 
             // Uncomment this when you chose and created the two collections above
             //for (int i = 0; i < 5; i++)
@@ -228,16 +228,19 @@ namespace CSharpGenericsLab.Starter
             //}
 
             // Iterate through the collection "evenNumbers" and print the elements to the console
-            
-            
+
+
             // Iterate through the collection "oddNumbers" and print the elements to the console
-            
+
 
             // Create a new collection populated with even numbers.
-            
+
+
+            // Compute the union of "numbers" and "oddNumbers" collections
+
 
             // Iterate through the collection "numbers" and print the elements to the console//
-            
+
         }
     }
 }
