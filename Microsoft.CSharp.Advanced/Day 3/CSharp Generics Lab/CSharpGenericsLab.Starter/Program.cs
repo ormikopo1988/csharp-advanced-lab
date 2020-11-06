@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.Concurrent;
+using System.Diagnostics.CodeAnalysis;
 
 namespace CSharpGenericsLab.Starter
 {
@@ -7,10 +10,10 @@ namespace CSharpGenericsLab.Starter
         static void Main(string[] args)
         {
             ScenarioOne();
-            //ScenarioTwo();
-            //ScenarioThree();
-            //ScenarioFour();
-            //ScenarioFive();
+            ScenarioTwo();
+            ScenarioThree();
+            ScenarioFour();
+            ScenarioFive();
         }
 
         static void ScenarioOne()
@@ -23,18 +26,32 @@ namespace CSharpGenericsLab.Starter
             // Create a generic collection with five strings and default capacity and give it the name "requests".
             // Put inside the collection the strings "Request1", "Request2", "Request3", "Request4", "Request5".
 
+            var requests = new ConcurrentQueue<string>();
+
+            requests.Enqueue("Request1");
+            requests.Enqueue("Request2");
+            requests.Enqueue("Request3");
+            requests.Enqueue("Request4");
+            requests.Enqueue("Request5");
 
             // Write code to enumerate through the elements of the collection.
-
+            foreach(string str in requests)
+            {
+                Console.WriteLine(str);
+            }
 
             // Write code to get the "Request2" from the collection
+            requests.TryDequeue(out string result1);
+            Console.WriteLine(result1);
 
+            requests.TryDequeue(out string result2);
+            Console.WriteLine(result2);
 
             // Delete all the elements from the collection.
-
+            requests.Clear();
 
             // Print the number of the elements in the collection.
-
+            Console.WriteLine($"Total elements in collection: { requests.Count }");
         }
 
         static void ScenarioTwo()
@@ -48,6 +65,7 @@ namespace CSharpGenericsLab.Starter
             // Create the sorted collection here.
             // Name the sorted collection "openWith".
 
+            var openWith = new SortedDictionary<string, string>();
 
             // Add some elements to the collection.
             // 1st item => Key: "txt", Value: "notepad.exe"
@@ -55,50 +73,93 @@ namespace CSharpGenericsLab.Starter
             // 3rd item => Key: "dib", Value: "paint.exe"
             // 4th item => Key: "rtf", Value: "wordpad.exe"
 
+            openWith.Add("txt", "notepad.exe");
+            openWith.Add("bmp", "paint.exe");
+            openWith.Add("dib", "paint.exe");
+            openWith.Add("rtf", "wordpad.exe");
+
 
             // Try add an element with the same key, e.g. "txt".
             // Surround with try catch block. The catch block will expect an ArgumentException.
             // Inside the catch block write a message that the element with the specified key already exists.
 
+            try
+            {
+                openWith.Add("txt", "word.exe");
+            }
+            catch(ArgumentException ex)
+            {
+                Console.WriteLine($"The element with the specified key, already exists.");
+            }
 
             // Access the "rtf" element of the collection by using the string indexer and write to console.
-
+            Console.WriteLine(openWith["rtf"]);
 
             // Use the indexer "rtf" to change the value associated with it.
             // Write the new value to the console.
-
+            openWith["rtf"] = "Changed Value";
+            Console.WriteLine(openWith["rtf"]);
 
             // Add a new element in the collection by setting the indexer for a key "doc" with a value "winword.exe".
-
+            openWith.Add("doc", "winword.exe");
 
             // Use the indexer to request a key called "tif" that does not exist in the collection.
             // Surround with try / catch block with a KeyNotFoundException and write the error message 
             // that the specified key was not found in the console.
-
+            try
+            {
+                Console.WriteLine(openWith["tif"]);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                Console.WriteLine($"The element with the specified key, does not exist.");
+            }
 
             // Use a more efficient way to find the value in the collection by 
             // using a try get value logic that the collection has.
             // Try find the "tif" element in the collection and print its value to the console.
-
+            if (openWith.TryGetValue("tif", out string value))
+            {
+                Console.WriteLine($"tif: { value }");
+            }
+            else
+            {
+                Console.WriteLine("The specified key was not found.");
+            }
 
             // Check if the key "ht" is contained inside the collection.
             // If not then add it with the value of "hypertrm.exe" to the collection.
-
+            if (!openWith.ContainsKey("ht"))
+            {
+                openWith.Add("ht", "hypertrm.exe");
+            }
 
             // Enumerate the collection elements and print their key and value to the console.
-
+            foreach(string key in openWith.Keys)
+            {
+                Console.WriteLine($"{key}: {openWith[key]}");
+            }
 
             // Get the values of the collection alone
-
+            foreach (string key in openWith.Keys)
+            {
+                Console.WriteLine($"{key}");
+            }
 
             // Get the keys of the collection alone
-
+            foreach (string val in openWith.Values)
+            {
+                Console.WriteLine($"{val}");
+            }
 
             // Remove the "doc" element from the collection.
-
+            openWith.Remove("doc");
 
             // Enumerate the collection elements and print their key and value to the console.
-
+            foreach (string key in openWith.Keys)
+            {
+                Console.WriteLine($"{key}: {openWith[key]}");
+            }
         }
 
         static void ScenarioThree()
@@ -155,27 +216,45 @@ namespace CSharpGenericsLab.Starter
             // 6th object => PartName = "shift lever", PartId = 1634
 
             // Create a collection of parts.
-
+            var parts = new List<Part>();
 
             // Add parts to the collection.
-
+            parts.Add(new Part { PartId = 1234, PartName= "creank arm" });
+            parts.Add(new Part { PartId = 1334, PartName= "chain ring" });
+            parts.Add(new Part { PartId = 1434, PartName= "regular seat" });
+            parts.Add(new Part { PartId = 1444, PartName= "banana seat" });
+            parts.Add(new Part { PartId = 1534, PartName= "cassette" });
+            parts.Add(new Part { PartId = 1634, PartName= "shift lever" });
 
             // Write out the parts in the collection. This will call the overridden ToString method in the Part class.
-
+            foreach(var item in parts)
+            {
+                Console.WriteLine(item.ToString());
+            }
 
             // Check the collection for part #1734. This calls the IEquatable.Equals method
             // of the Part class, which checks the PartId for equality.
-
+            if (parts.Contains(new Part { PartId = 1734, PartName = "" }))
+            {
+                Console.WriteLine($"List contains key 1734");
+            }
+            else
+            {
+                Console.WriteLine($"List does not contain key 1734");
+            }
 
             // This will remove part 1534 even though the PartName is different,
             // because the Equals method only checks PartId for equality.
 
 
             // Remove the part at index 3.
-
+            parts.RemoveAt(3);
 
             // Print the parts again
-
+            foreach (var item in parts)
+            {
+                Console.WriteLine(item.ToString());
+            }
         }
 
         static void ScenarioFour()
@@ -188,19 +267,31 @@ namespace CSharpGenericsLab.Starter
 
             // Create a generic collection with five strings and default capacity and give it the name "shirts".
             // Put inside the collection the strings "GreenShirt", "BlueShirt", "RedShirt", "OrangeShirt", "YellowShirt".
-
+            var shirts = new Stack<string>(5);
+            shirts.Push("GreenShirt");
+            shirts.Push("BlueShirt");
+            shirts.Push("RedShirt");
+            shirts.Push("OrangeShirt");
+            shirts.Push("YellowShirt");
 
             // Write code to enumerate through the elements of the collection.
-
+            foreach(var item in shirts)
+            {
+                Console.WriteLine(item);
+            }
 
             // Write code to get the "RedShirt" from the collection
+            var greenShirt = shirts.Pop();
+            var blueShirt = shirts.Pop();
+            var redShirt = shirts.Pop();
 
+            Console.WriteLine(redShirt);
 
             // Delete all the elements from the collection.
-
+            shirts.Clear();
 
             // Print the number of the elements in the collection.
-
+            Console.WriteLine($"The total items in the collection is { shirts.Count }");
         }
 
         static void ScenarioFive()
@@ -212,32 +303,82 @@ namespace CSharpGenericsLab.Starter
             // Performance for your application is more important than order or element duplication.
 
             // Create a collection of integers called "evenNumbers"
-            
+            var evenNumbers = new HashSet<int>();
 
             // Create a collection of integers called "oddNumbers"
-            
+            var oddNumbers = new HashSet<int>();
 
             // Uncomment this when you chose and created the two collections above
-            //for (int i = 0; i < 5; i++)
-            //{
-            //    // Populate numbers with just even numbers.
-            //    evenNumbers.Add(i * 2);
+            for (int i = 0; i < 5; i++)
+            {
+                // Populate numbers with just even numbers.
+                evenNumbers.Add(i * 2);
 
-            //    // Populate oddNumbers with just odd numbers.
-            //    oddNumbers.Add((i * 2) + 1);
-            //}
+                // Populate oddNumbers with just odd numbers.
+                oddNumbers.Add((i * 2) + 1);
+            }
 
             // Iterate through the collection "evenNumbers" and print the elements to the console
-            
-            
+            Console.Write("Even Numbers: ");
+            foreach (var item in evenNumbers)
+            {
+                Console.Write(item.ToString() + " ");
+            }
+            Console.WriteLine();
+
             // Iterate through the collection "oddNumbers" and print the elements to the console
-            
+            Console.Write("Odd Numbers: ");
+            foreach (var item in oddNumbers)
+            {
+                Console.Write(item.ToString() + " ");
+            }
+            Console.WriteLine();
 
             // Create a new collection populated with even numbers.
-            
+            var myEvenNumbers = new HashSet<int>();
+            for (int i = 0; i < 5; i++)
+            {
+                myEvenNumbers.Add(i * 2);
+            }
 
             // Iterate through the collection "numbers" and print the elements to the console//
-            
+            Console.Write("My even numbers: ");
+            foreach (var item in myEvenNumbers)
+            {
+                Console.Write(item.ToString() + " ");
+            }
+            Console.WriteLine();
+        }
+    }
+
+    public class Part : IEquatable<Part>
+    {
+        public int PartId { get; set; }
+        public string PartName { get; set; }
+
+        public override int GetHashCode()
+        {
+            return PartId;
+        }
+
+        public bool Equals(Part other)
+        {
+            if (other == null)
+            {
+                return false;
+            }
+
+            if (this == other)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public override string ToString()
+        {
+            return "ID: " + PartId + "   Name:" + PartName;
         }
     }
 }
