@@ -1,11 +1,12 @@
 ﻿using AsyncApiCore.Starter.Models;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace AsyncApiCore.Starter.Interfaces
 {
     public interface IUserService
     {
-        List<User> GetAll();
-        User GetById(int id);
+        Task<List<User>> GetAllAsync();
+        Task<User> GetByIdAsync(int id);
     }
 }

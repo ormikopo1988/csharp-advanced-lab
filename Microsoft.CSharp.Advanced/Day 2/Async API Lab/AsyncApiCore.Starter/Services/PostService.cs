@@ -5,6 +5,8 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace AsyncApiCore.Starter.Services
 {
@@ -17,16 +19,16 @@ namespace AsyncApiCore.Starter.Services
             _logger = logger;
         }
 
-        public List<Post> GetAll()
+        public async Task<List<Post>> GetAll()
         {
             try
             {
-                // TODO - Change this code in order to use HttpClient instead of WebClient and call GetAsync instead of DownloadString on the client object instance.
-                using (var client = new WebClient())
+                using (var client = new HttpClient())
                 {
-                    var posts = client.DownloadString("https://jsonplaceholder.typicode.com/posts");
+                    var posts = await client.GetAsync("https://jsonplaceholder.typicode.com/posts");
+                    var postStr = await posts.Content.ReadAsStringAsync();
 
-                    return JsonConvert.DeserializeObject<List<Post>>(posts);
+                    return JsonConvert.DeserializeObject<List<Post>>(postStr);
                 }
             }
             catch (Exception ex)
@@ -37,16 +39,17 @@ namespace AsyncApiCore.Starter.Services
             return null;
         }
 
-        public Post GetById(int id)
+        public async Task<Post> GetById(int id)
         {
             try
             {
                 // TODO - Change this code in order to use HttpClient instead of WebClient and call GetAsync instead of DownloadString on the client object instance.
-                using (var client = new WebClient())
+                using (var client = new HttpClient())
                 {
-                    var post = client.DownloadString("https://jsonplaceholder.typicode.com/posts/" + id.ToString());
+                    var post = await client.GetAsync("https://jsonplaceholder.typicode.com/posts/" + id.ToString());
+                    var str = await post.Content.ReadAsStringAsync();
 
-                    return JsonConvert.DeserializeObject<Post>(post);
+                    return JsonConvert.DeserializeObject<Post>(str);
                 }
             }
             catch (Exception ex)
@@ -57,16 +60,18 @@ namespace AsyncApiCore.Starter.Services
             return null;
         }
 
-        public List<Post> GetPostsForUser(int userID)
+        public async Task<List<Post>> GetPostsForUser(int userID)
         {
             try
             {
                 // TODO - Change this code in order to use HttpClient instead of WebClient and call GetAsync instead of DownloadString on the client object instance.
-                using (var client = new WebClient())
+                using (var client = new HttpClient())
                 {
-                    var posts = client.DownloadString("https://jsonplaceholder.typicode.com/posts?userId=" + userID.ToString());
+                    var posts = await client.GetAsync("https://jsonplaceholder.typicode.com/posts?userId=" + userID.ToString());
 
-                    return JsonConvert.DeserializeObject<List<Post>>(posts);
+                    var str = await posts.Content.ReadAsStringAsync();
+
+                    return JsonConvert.DeserializeObject<List<Post>>(str);
                 }
             }
             catch (Exception ex)
